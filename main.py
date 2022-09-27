@@ -23,7 +23,8 @@ window.config(padx=50, pady=50, bg=background)
 try:
     data = pandas.read_csv("progress.csv")
 except FileNotFoundError:
-    data = pandas.read_csv("french_words.csv")
+    original_data = pandas.read_csv("french_words.csv")
+    word_list = (original_data.to_dict(orient="records"))
 else:
     word_list = (data.to_dict(orient="records"))
 
