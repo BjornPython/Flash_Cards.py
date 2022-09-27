@@ -3,6 +3,7 @@ import time
 from tkinter import *
 import pandas
 from random import *
+import csv
 
 # Global variables
 background = "#343434"
@@ -20,9 +21,9 @@ window.config(padx=50, pady=50, bg=background)
 # -----------------------------------------------------------------------------------------------#
 # Read FILE
 try:
-    data = pandas.read_csv("french_words.csv")
+    data = pandas.read_csv("progress.csv")
 except FileNotFoundError:
-    print("Cannot find File")
+    data = pandas.read_csv("french_words.csv")
 else:
     word_list = (data.to_dict(orient="records"))
 
@@ -65,6 +66,7 @@ def delete():
         new_word()
         del word_list[current_index]
         list_count_label.config(text=f"Words Left: {len(word_list)}")  # Edits the words left count.
+        save_progress()
 
 
 def flip_card():
@@ -83,6 +85,12 @@ def completed():
     canvas.itemconfig(can_lang, text="")
     canvas.itemconfig(can_word, text="YOU HAVE COMPLETED\nALL THE FLASHCARDS!", fill="black")
     canvas.itemconfig(card_background, image=front)
+
+def save_progress():
+    global word_list
+    data = pandas.DataFrame(word_list)
+    data.to_csv("progress.csv", index=False)
+
 
 
 flip_timer = window.after(3000, func=flip_card)
